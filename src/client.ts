@@ -8,7 +8,6 @@ import {
 import { Config } from "./config";
 
 export const createClient = (config: Config): LanguageClient => {
-  console.warn(config.serverPath);
   const serverOptions: ServerOptions = {
     run: { command: config.serverPath, transport: TransportKind.stdio },
     debug: { command: config.serverPath, transport: TransportKind.stdio },
@@ -19,8 +18,6 @@ export const createClient = (config: Config): LanguageClient => {
       adapterCommand: config.adapterCommands,
     },
   };
-  console.warn(config.fileTypes);
-  console.warn(config.adapterCommands);
   const client = new LanguageClient(
     "testing-ls",
     "testing-language-server",

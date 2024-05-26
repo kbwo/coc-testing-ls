@@ -3,8 +3,8 @@ import { Config } from "./config";
 import { createClient } from "./client";
 
 export class Ctx {
-  private extCtx: ExtensionContext;
-  private config: Config;
+  public extCtx: ExtensionContext;
+  public config: Config;
   private client: LanguageClient | null;
 
   constructor(extCtx: ExtensionContext) {

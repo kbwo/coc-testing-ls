@@ -1,13 +1,13 @@
 import { WorkspaceConfiguration, workspace } from "coc.nvim";
 
-type AdapterConfiguration = {
+export type AdapterConfiguration = {
   path: string;
-  extraArgs: string[];
+  extra_args: string[];
   envs: Record<string, string>;
 };
 
 /** key is file extension */
-type AdapterCommand = Record<string, AdapterConfiguration[]>;
+export type AdapterCommand = Record<string, AdapterConfiguration[]>;
 
 export class Config {
   private readonly rootSection = "testing";
@@ -23,7 +23,7 @@ export class Config {
     );
   }
 
-  get adapterCommands(): AdapterCommand | null {
+  get adapterCommands(): AdapterCommand {
     return this.cfg.get<AdapterCommand | null>("adapterCommand") || {};
   }
 
