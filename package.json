@@ -29,10 +29,23 @@
       "type": "object",
       "title": "coc-testing configuration",
       "properties": {
-        "coc-testing.enabled": {
+        "testing.enabled": {
           "type": "boolean",
           "default": true,
           "description": "Enable coc-testing extension"
+        },
+        "testing.fileTypes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "description": "File types to enable coc-testing"
+        },
+        "adapterCommand": {
+          "type": "object",
+          "default": {},
+          "description": "Adapter commands for testing-language-server"
         }
       }
     },
