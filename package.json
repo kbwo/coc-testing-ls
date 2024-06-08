@@ -1,5 +1,5 @@
 {
-  "name": "coc-testing",
+  "name": "coc-testing-ls",
   "version": "0.0.0-development",
   "description": "coc.nvim extension for testing-language-server",
   "author": "kbwo <kabaaa1126@gmail.com>",
@@ -27,12 +27,12 @@
   "contributes": {
     "configuration": {
       "type": "object",
-      "title": "coc-testing configuration",
+      "title": "coc-testing-ls configuration",
       "properties": {
         "testing.enabled": {
           "type": "boolean",
           "default": true,
-          "description": "Enable coc-testing extension"
+          "description": "Enable coc-testing-ls extension"
         },
         "testing.fileTypes": {
           "type": "array",
@@ -40,7 +40,7 @@
             "type": "string"
           },
           "default": [],
-          "description": "File types to enable coc-testing"
+          "description": "File types to enable coc-testing-ls"
         },
         "adapterCommand": {
           "type": "object",
@@ -51,8 +51,14 @@
     },
     "commands": [
       {
-        "command": "coc-testing.Command",
-        "title": "coc-testing command title"
+        "command": "testing-ls.runFileTest",
+        "title": "Run file test with testing-language-server",
+        "category": "testing-ls"
+      },
+      {
+        "command": "testing-ls.restart",
+        "title": "Restart testing-language-server",
+        "category": "testing-ls"
       }
     ]
   }

@@ -1,5 +1,4 @@
 import {
-  Executable,
   LanguageClient,
   LanguageClientOptions,
   ServerOptions,
