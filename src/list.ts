@@ -10,8 +10,8 @@ import {
   Neovim,
   workspace,
 } from "coc.nvim";
-import { AdapterCommand } from "./config";
-import { Adapter } from "./adapter";
+import { AdapterCommand, AdapterConfiguration } from "./config";
+import { Adapter, AdapterTestItem } from "./adapter";
 import { Ctx } from "./context";
 import * as fs from "fs";
 import * as path from "path";
@@ -19,8 +19,14 @@ import * as path from "path";
 const formatFilePath = (path: string) =>
   path.replace("file://", "").replace("file:", "");
 
+type ListItemData = AdapterTestItem & {
+  path: string;
+  adapter: AdapterConfiguration;
+  workspaceRoot: string;
+};
+
 export default class TestList implements IList {
-  ACTION_KEY: string = "execute";
+  ACTION_KEY: string = "runFileTest";
   name: string = "tests";
   defaultAction: string = this.ACTION_KEY;
   actions: ListAction[] = [];
@@ -33,30 +39,37 @@ export default class TestList implements IList {
   ): Promise<ListItem[] | ListTask | null | undefined> {
     let items: ListItem[] = [];
     const defaultWorkspaceUri = workspace.workspaceFolders[0].uri;
-    for (const [extension, adapterConfig] of Object.entries(this.adapters)) {
+    for (const [extension, adapterConfigs] of Object.entries(this.adapters)) {
       const allFiles = this.getAllFiles(defaultWorkspaceUri, extension);
-      for (const a of adapterConfig) {
-        const adapter = new Adapter(a);
+      for (const adapterConfig of adapterConfigs) {
+        const adapter = new Adapter(adapterConfig);
         const roots = await adapter.detectWorkspaceRoot(allFiles);
-        const filePaths = Object.values(roots).flat();
-        const discoverResult = await adapter.discover(filePaths);
-        discoverResult.forEach((resultItem) => {
-          const listItems = resultItem.tests.map((test) => {
-            const location: LocationWithLine = {
-              uri: resultItem.path,
-              line: test.start_position.start.line.toString(),
-              text: test.name,
-            };
-            const newListItem: ListItem = {
-              label: test.name,
-              filterText: test.name,
-              location: location,
-              // data: resultItem,
-            };
-            return newListItem;
+        for (const [workspaceRoot, filePaths] of Object.entries(roots)) {
+          const discoverResult = await adapter.discover(filePaths);
+          discoverResult.forEach((resultItem) => {
+            const listItems = resultItem.tests.map((test) => {
+              const location: LocationWithLine = {
+                uri: resultItem.path,
+                line: test.start_position.start.line.toString(),
+                text: test.name,
+              };
+              const data: ListItemData = {
+                ...test,
+                path: resultItem.path,
+                adapter: adapterConfig,
+                workspaceRoot,
+              };
+              const newListItem: ListItem = {
+                label: test.name,
+                filterText: test.name,
+                location: location,
+                data,
+              };
+              return newListItem;
+            });
+            items = [...items, ...listItems];
           });
-          items = [...items, ...listItems];
-        });
+        }
       }
     }
     return items;
@@ -97,7 +110,10 @@ export default class TestList implements IList {
       name: this.ACTION_KEY,
       execute: async (item) => {
         if (Array.isArray(item)) return;
-        let data = item.data;
+        const data: ListItemData = item.data;
+        // todo run file test via command
+        // const adapter = new Adapter(data.adapter);
+        // await adapter.runFileTest(data.workspaceRoot, [data.path]);
       },
     });
   }

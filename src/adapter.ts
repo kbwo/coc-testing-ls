@@ -17,7 +17,7 @@ type Range = {
   end: Position;
 };
 
-type AdapterTestItem = {
+export type AdapterTestItem = {
   id: string;
   name: string;
   start_position: Range;
