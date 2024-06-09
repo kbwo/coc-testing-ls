@@ -1,6 +1,6 @@
 import { spawn } from "child_process";
 import { Diagnostic } from "coc.nvim";
-import { AdapterConfiguration } from "./config";
+import { AdapterConfiguration } from "./ext";
 
 type DiscoverResultItem = {
   path: string;
