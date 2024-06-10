@@ -7,22 +7,20 @@ import {
   ListItem,
   ListTask,
   LocationWithLine,
-  Neovim,
-  workspace,
 } from "coc.nvim";
-import { AdapterCommand, AdapterConfiguration } from "./config";
-import { Adapter, AdapterTestItem } from "./adapter";
-import { Ctx } from "./context";
+import { AdapterTestItem } from "./adapter";
 import * as fs from "fs";
 import * as path from "path";
+import { discoverFileTest } from "./client";
+import { Ctx } from "./context";
 
 const formatFilePath = (path: string) =>
   path.replace("file://", "").replace("file:", "");
 
 type ListItemData = AdapterTestItem & {
   path: string;
-  adapter: AdapterConfiguration;
-  workspaceRoot: string;
+  // adapter: AdapterConfiguration;
+  // workspaceRoot: string;
 };
 
 export default class TestList implements IList {
@@ -30,48 +28,40 @@ export default class TestList implements IList {
   name: string = "tests";
   defaultAction: string = this.ACTION_KEY;
   actions: ListAction[] = [];
-  adapters: AdapterCommand;
-  ctx: Neovim;
+  ctx: Ctx;
 
   async loadItems(
     _context: ListContext,
     _token: CancellationToken
   ): Promise<ListItem[] | ListTask | null | undefined> {
-    let items: ListItem[] = [];
-    const defaultWorkspaceUri = workspace.workspaceFolders[0].uri;
-    for (const [extension, adapterConfigs] of Object.entries(this.adapters)) {
-      const allFiles = this.getAllFiles(defaultWorkspaceUri, extension);
-      for (const adapterConfig of adapterConfigs) {
-        const adapter = new Adapter(adapterConfig);
-        const roots = await adapter.detectWorkspaceRoot(allFiles);
-        for (const [workspaceRoot, filePaths] of Object.entries(roots)) {
-          const discoverResult = await adapter.discover(filePaths);
-          discoverResult.forEach((resultItem) => {
-            const listItems = resultItem.tests.map((test) => {
-              const location: LocationWithLine = {
-                uri: resultItem.path,
-                line: test.start_position.start.line.toString(),
-                text: test.name,
-              };
-              const data: ListItemData = {
-                ...test,
-                path: resultItem.path,
-                adapter: adapterConfig,
-                workspaceRoot,
-              };
-              const newListItem: ListItem = {
-                label: test.name,
-                filterText: test.name,
-                location: location,
-                data,
-              };
-              return newListItem;
-            });
-            items = [...items, ...listItems];
-          });
-        }
-      }
+    if (!this.ctx.client) {
+      throw new Error("client is not initialized");
     }
+    let items: ListItem[] = [];
+    const discoverResult = await discoverFileTest(this.ctx.client);
+    discoverResult.forEach((resultItem) => {
+      const listItems = resultItem.tests.map((test) => {
+        const location: LocationWithLine = {
+          uri: resultItem.path,
+          line: test.start_position.start.line.toString(),
+          text: test.name,
+        };
+        const data: ListItemData = {
+          ...test,
+          path: resultItem.path,
+          // adapter: adapterConfig,
+          // workspaceRoot,
+        };
+        const newListItem: ListItem = {
+          label: test.name,
+          filterText: test.name,
+          location: location,
+          data,
+        };
+        return newListItem;
+      });
+      items = [...items, ...listItems];
+    });
     return items;
   }
 
@@ -103,9 +93,8 @@ export default class TestList implements IList {
   detail?: string | undefined;
   options?: ListArgument[] | undefined;
 
-  constructor(nvim: Neovim, ctx: Ctx) {
-    this.adapters = ctx.config.adapterCommands;
-    this.ctx = nvim;
+  constructor(ctx: Ctx) {
+    this.ctx = ctx;
     this.actions.push({
       name: this.ACTION_KEY,
       execute: async (item) => {

@@ -3,8 +3,10 @@ import {
   LanguageClientOptions,
   ServerOptions,
   TransportKind,
+  workspace,
 } from "coc.nvim";
 import { Config } from "./config";
+import { DiscoverResult } from "./ext";
 
 export const createClient = (config: Config): LanguageClient => {
   const serverOptions: ServerOptions = {
@@ -24,4 +26,18 @@ export const createClient = (config: Config): LanguageClient => {
     clientOptions
   );
   return client;
+};
+
+export const discoverFileTest = async (
+  client: LanguageClient
+): Promise<DiscoverResult> => {
+  const { document } = await workspace.getCurrentState();
+  const params = {
+    uri: document.uri,
+  };
+  const discoverResult: DiscoverResult = await client.sendRequest(
+    "$/discoverFileTest",
+    params
+  );
+  return discoverResult;
 };

@@ -1,7 +1,7 @@
 import { ExtensionContext, LanguageClient, commands, services } from "coc.nvim";
 import { Config } from "./config";
-import { createClient } from "./client";
 import { Command } from "./command";
+import { createClient } from "./client";
 
 export class Ctx {
   public extCtx: ExtensionContext;
@@ -17,6 +17,7 @@ export class Ctx {
   public async startServer() {
     try {
       const client = createClient(this.config);
+      this.client = client;
       this.extCtx.subscriptions.push(
         commands.registerCommand("testing-ls.runFileTest", async () => {
           Command.runFileTests(client);
