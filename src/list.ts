@@ -1,5 +1,6 @@
 import {
   CancellationToken,
+  DiagnosticItem,
   IList,
   ListAction,
   ListArgument,
@@ -7,12 +8,13 @@ import {
   ListItem,
   ListTask,
   LocationWithLine,
+  diagnosticManager,
+  workspace,
 } from "coc.nvim";
 import { AdapterTestItem } from "./adapter";
-import * as fs from "fs";
-import * as path from "path";
 import { discoverFileTest } from "./client";
 import { Ctx } from "./context";
+import { DiscoverResultItem } from "./ext";
 
 const formatFilePath = (path: string) =>
   path.replace("file://", "").replace("file:", "");
@@ -21,6 +23,18 @@ type ListItemData = AdapterTestItem & {
   path: string;
   // adapter: AdapterConfiguration;
   // workspaceRoot: string;
+};
+
+const hasError = (
+  testItem: AdapterTestItem,
+  diagnostics: readonly DiagnosticItem[]
+) => {
+  return diagnostics.some((diagnostic) => {
+    return (
+      diagnostic.lnum >= testItem.start_position.start.line &&
+      diagnostic.lnum <= testItem.end_position.end.line
+    );
+  });
 };
 
 export default class TestList implements IList {
@@ -37,10 +51,14 @@ export default class TestList implements IList {
     if (!this.ctx.client) {
       throw new Error("client is not initialized");
     }
+    const diagnosticList = (await diagnosticManager.getDiagnosticList()).filter(
+      (d) => d.source === "testing-ls"
+    );
     let items: ListItem[] = [];
     const discoverResult = await discoverFileTest(this.ctx.client);
     discoverResult.forEach((resultItem) => {
       const listItems = resultItem.tests.map((test) => {
+        const decorator = hasError(test, diagnosticList) ? "❌" : "✅";
         const location: LocationWithLine = {
           uri: resultItem.path,
           line: test.start_position.start.line.toString(),
@@ -53,7 +71,7 @@ export default class TestList implements IList {
           // workspaceRoot,
         };
         const newListItem: ListItem = {
-          label: test.name,
+          label: decorator + " " + test.name,
           filterText: test.name,
           location: location,
           data,
@@ -64,30 +82,6 @@ export default class TestList implements IList {
     });
     return items;
   }
-
-  getAllFiles(
-    dirPath: string,
-    extension: string,
-    allFiles: string[] = []
-  ): string[] {
-    const dir = formatFilePath(dirPath);
-    const files = fs.readdirSync(dir);
-    files.forEach((file) => {
-      let filePath = path.join(dirPath, file);
-      filePath = formatFilePath(path.join(dirPath, file));
-      if (fs.statSync(filePath).isDirectory()) {
-        allFiles = this.getAllFiles(
-          path.join(dirPath, file),
-          extension,
-          allFiles
-        );
-      } else if (file.endsWith(extension)) {
-        allFiles.push(filePath);
-      }
-    });
-    return allFiles;
-  }
-
   interactive?: boolean | undefined;
   description?: string | undefined;
   detail?: string | undefined;
