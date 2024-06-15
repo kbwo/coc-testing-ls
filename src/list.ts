@@ -9,20 +9,13 @@ import {
   ListTask,
   LocationWithLine,
   diagnosticManager,
-  workspace,
 } from "coc.nvim";
 import { AdapterTestItem } from "./adapter";
 import { discoverFileTest } from "./client";
 import { Ctx } from "./context";
-import { DiscoverResultItem } from "./ext";
-
-const formatFilePath = (path: string) =>
-  path.replace("file://", "").replace("file:", "");
 
 type ListItemData = AdapterTestItem & {
   path: string;
-  // adapter: AdapterConfiguration;
-  // workspaceRoot: string;
 };
 
 const hasError = (
@@ -67,8 +60,6 @@ export default class TestList implements IList {
         const data: ListItemData = {
           ...test,
           path: resultItem.path,
-          // adapter: adapterConfig,
-          // workspaceRoot,
         };
         const newListItem: ListItem = {
           label: decorator + " " + test.name,
@@ -89,15 +80,5 @@ export default class TestList implements IList {
 
   constructor(ctx: Ctx) {
     this.ctx = ctx;
-    this.actions.push({
-      name: this.ACTION_KEY,
-      execute: async (item) => {
-        if (Array.isArray(item)) return;
-        const data: ListItemData = item.data;
-        // todo run file test via command
-        // const adapter = new Adapter(data.adapter);
-        // await adapter.runFileTest(data.workspaceRoot, [data.path]);
-      },
-    });
   }
 }
