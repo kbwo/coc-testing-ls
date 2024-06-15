@@ -1,11 +1,5 @@
 import { WorkspaceConfiguration, workspace } from "coc.nvim";
 
-export type AdapterConfiguration = {
-  path: string;
-  extra_args: string[];
-  envs: Record<string, string>;
-};
-
 /** key is file extension */
 export type AdapterCommand = Record<string, AdapterConfiguration[]>;
 
@@ -29,5 +23,9 @@ export class Config {
 
   get fileTypes(): string[] {
     return this.cfg.get<null | string[]>("fileTypes") || [];
+  }
+
+  get enabled() {
+    return this.cfg.get<boolean>("enabled") || true;
   }
 }
