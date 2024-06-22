@@ -13,10 +13,12 @@ export const createClient = (config: Config): LanguageClient => {
     run: { command: config.serverPath, transport: TransportKind.stdio },
     debug: { command: config.serverPath, transport: TransportKind.stdio },
   };
+  const cwd = workspace.cwd;
   const clientOptions: LanguageClientOptions = {
     documentSelector: config.fileTypes,
     initializationOptions: {
       adapterCommand: config.adapterCommands,
+      projectDir: cwd,
     },
   };
   const client = new LanguageClient(

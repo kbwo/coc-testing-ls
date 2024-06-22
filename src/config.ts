@@ -1,4 +1,5 @@
 import { WorkspaceConfiguration, workspace } from "coc.nvim";
+import { AdapterConfiguration } from "./ext";
 
 /** key is file extension */
 export type AdapterCommand = Record<string, AdapterConfiguration[]>;

@@ -4,7 +4,6 @@ import TestList from "./list";
 import { Config } from "./config";
 
 export async function activate(context: ExtensionContext): Promise<void> {
-  window.showInformationMessage("coc-testing works?");
   const cfg = new Config();
   if (!cfg.enabled) {
     return;

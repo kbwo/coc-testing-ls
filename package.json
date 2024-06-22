@@ -29,7 +29,7 @@
       "type": "object",
       "title": "coc-testing-ls configuration",
       "properties": {
-        "testing.enabled": {
+        "testing.enable": {
           "type": "boolean",
           "default": true,
           "description": "Enable coc-testing-ls extension"
@@ -46,6 +46,16 @@
           "type": "object",
           "default": {},
           "description": "Adapter commands for testing-language-server"
+        },
+        "server.path": {
+          "type": "string",
+          "default": "testing-language-server",
+          "description": "Path of testing-language-server"
+        },
+        "trace.server": {
+          "type": "string",
+          "default": "info",
+          "description": "Trace level of testing-language-server"
         }
       }
     },

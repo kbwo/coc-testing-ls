@@ -10,9 +10,9 @@ import {
   LocationWithLine,
   diagnosticManager,
 } from "coc.nvim";
-import { AdapterTestItem } from "./adapter";
 import { discoverFileTest } from "./client";
 import { Ctx } from "./context";
+import { AdapterTestItem } from "./ext";
 
 type ListItemData = AdapterTestItem & {
   path: string;

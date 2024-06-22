@@ -1,17 +1,19 @@
 import { Diagnostic } from "coc.nvim";
 
 /** key: adapter command path **/
-export type DetectedWorkspaceRoots = Record<string, WorkspaceAnalysis>;
+export type DetectedWorkspaces = Record<string, WorkspaceAnalysis>;
 
 export type WorkspaceAnalysis = {
   adapter_config: AdapterConfiguration;
-  workspace_roots: DetectWorkspaceRootResult;
+  workspaces: DetectWorkspaceResult;
 };
 
 export type AdapterConfiguration = {
   path: string;
   extra_args: string[];
   envs: Record<string, string>;
+  include_pattenr: string[];
+  exclude_pattern: string[];
 };
 
 export type DiscoverResultItem = {
@@ -45,11 +47,8 @@ export type RunFileTestResultItem = {
 
 export type RunFileTestResult = RunFileTestResultItem[];
 
-export type WorkspaceRootFilePath = string;
+export type WorkspaceFilePath = string;
 
 export type FilePath = string;
 
-export type DetectWorkspaceRootResult = Record<
-  WorkspaceRootFilePath,
-  FilePath[]
->;
+export type DetectWorkspaceResult = Record<WorkspaceFilePath, FilePath[]>;
