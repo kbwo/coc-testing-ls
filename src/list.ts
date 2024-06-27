@@ -9,6 +9,7 @@ import {
   ListTask,
   LocationWithLine,
   diagnosticManager,
+  nvim,
 } from "coc.nvim";
 import { discoverFileTest } from "./client";
 import { Ctx } from "./context";
@@ -31,9 +32,11 @@ const hasError = (
 };
 
 export default class TestList implements IList {
-  ACTION_KEY: string = "runFileTest";
+  ACTION_KEY = {
+    RUN_FILE_TEST: "RunFileTest",
+  };
   name: string = "tests";
-  defaultAction: string = this.ACTION_KEY;
+  readonly defaultAction: string = "jump";
   actions: ListAction[] = [];
   ctx: Ctx;
 
@@ -80,5 +83,17 @@ export default class TestList implements IList {
 
   constructor(ctx: Ctx) {
     this.ctx = ctx;
+    this.actions.push({
+      name: this.defaultAction,
+      execute: async (item) => {
+        if (Array.isArray(item)) return;
+        const data: ListItemData = item.data;
+        console.warn("DEBUGPRINT[1]: list.ts:87: data=", data);
+        nvim.command(
+          `normal! ${data.start_position.start.line}G${data.start_position.start.character}|zz`,
+          true
+        );
+      },
+    });
   }
 }
