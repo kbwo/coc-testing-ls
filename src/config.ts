@@ -18,8 +18,12 @@ export class Config {
     );
   }
 
-  get adapterCommands(): AdapterCommand {
+  get adapterCommand(): AdapterCommand {
     return this.cfg.get<AdapterCommand | null>("adapterCommand") || {};
+  }
+
+  get enableWorkspaceDiagnostics(): boolean {
+    return !!this.cfg.get<boolean | null>("enableWorkspaceDiagnostics");
   }
 
   get fileTypes(): string[] {

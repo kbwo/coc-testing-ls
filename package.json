@@ -47,6 +47,11 @@
           "default": {},
           "description": "Adapter commands for testing-language-server"
         },
+        "enableWorkspaceDiagnostics": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable workspace diagnostics"
+        },
         "server.path": {
           "type": "string",
           "default": "testing-language-server",
