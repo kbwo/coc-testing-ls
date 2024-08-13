@@ -42,22 +42,22 @@
           "default": [],
           "description": "File types to enable coc-testing-ls"
         },
-        "adapterCommand": {
+        "testing.adapterCommand": {
           "type": "object",
           "default": {},
           "description": "Adapter commands for testing-language-server"
         },
-        "enableWorkspaceDiagnostics": {
+        "testing.enableWorkspaceDiagnostics": {
           "type": "boolean",
           "default": true,
           "description": "Enable workspace diagnostics"
         },
-        "server.path": {
+        "testing.server.path": {
           "type": "string",
           "default": "testing-language-server",
           "description": "Path of testing-language-server"
         },
-        "trace.server": {
+        "testing.trace.server": {
           "type": "string",
           "default": "info",
           "description": "Trace level of testing-language-server"
