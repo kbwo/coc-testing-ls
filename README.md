@@ -6,13 +6,9 @@ coc.nvim extension for testing-language-server
 
 `:CocInstall coc-testing`
 
-## Keymaps
-
-`nmap <silent> <C-l> <Plug>(coc-coc-testing-keymap)`
-
 ## Lists
 
-`:CocList demo_list`
+`:CocList tests`
 
 ## License
 
