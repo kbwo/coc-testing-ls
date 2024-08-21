@@ -22,7 +22,8 @@ export class Ctx {
 
   public async startServer() {
     try {
-      const client = await createClient(this.config);
+      console.warn("startServer");
+      const client = createClient(this.config);
       this.client = client;
       this.extCtx.subscriptions.push(
         commands.registerCommand("testing-ls.runFileTest", async () => {
@@ -30,6 +31,9 @@ export class Ctx {
         }),
         commands.registerCommand("testing-ls.restart", async () => {
           Command.restart(client);
+        }),
+        commands.registerCommand("testing-ls.clearDiagnostics", async () => {
+          Command.clearDiagnostics(client);
         }),
         services.registLanguageClient(client)
       );

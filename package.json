@@ -74,6 +74,16 @@
         "command": "testing-ls.restart",
         "title": "Restart testing-language-server",
         "category": "testing-ls"
+      },
+      {
+        "command": "testing-ls.restart",
+        "title": "Restart testing-language-server",
+        "category": "testing-ls"
+      },
+      {
+        "command": "testing-ls.clearDiagnostics",
+        "title": "clear all diagnostics",
+        "category": "testing-ls"
       }
     ]
   }

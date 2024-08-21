@@ -88,7 +88,6 @@ export default class TestList implements IList {
       execute: async (item) => {
         if (Array.isArray(item)) return;
         const data: ListItemData = item.data;
-        console.warn("DEBUGPRINT[1]: list.ts:87: data=", data);
         nvim.command(
           `normal! ${data.start_position.start.line}G${data.start_position.start.character}|zz`,
           true

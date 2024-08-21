@@ -16,4 +16,8 @@ export class Command {
 
     window.showInformationMessage(`Reloaded coc-testing-ls`);
   }
+
+  static async clearDiagnostics(client: LanguageClient) {
+    client.diagnostics?.clear();
+  }
 }
