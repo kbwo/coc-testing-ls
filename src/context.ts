@@ -22,7 +22,6 @@ export class Ctx {
 
   public async startServer() {
     try {
-      console.warn("startServer");
       const client = createClient(this.config);
       this.client = client;
       this.extCtx.subscriptions.push(
