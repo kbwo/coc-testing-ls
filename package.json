@@ -1,8 +1,8 @@
 {
   "name": "coc-testing-ls",
-  "version": "0.0.0-development",
+  "version": "0.0.1",
   "description": "coc.nvim extension for testing-language-server",
-  "author": "kbwo <kabaaa1126@gmail.com>",
+  "author": "kbwo <kbwo.owbk@gmail.com>",
   "license": "MIT",
   "main": "lib/index.js",
   "keywords": [
