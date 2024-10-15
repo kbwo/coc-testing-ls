@@ -10,10 +10,10 @@ export type WorkspaceAnalysis = {
 
 export type AdapterConfiguration = {
   path: string;
-  extra_args: string[];
+  extra_arg: string[];
   envs: Record<string, string>;
-  include_pattenr: string[];
-  exclude_pattern: string[];
+  include: string[];
+  exclude: string[];
 };
 
 export type DiscoverResultItem = {
