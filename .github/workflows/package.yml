@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - package.json
+      - .github/workflows/package.yml
     branches:
       - main
 
@@ -39,10 +40,14 @@ jobs:
           npm install
           npm run build
 
-      - name: Publish to npm
+      - name: Log in to npm
         if: steps.check_version.outputs.changed == 'true'
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
+
+      - name: Publish to npm
+        if: steps.check_version.outputs.changed == 'true'
         run: npm publish
 
       - name: Push tags
