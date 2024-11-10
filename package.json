@@ -1,6 +1,6 @@
 {
   "name": "coc-testing-ls",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "coc.nvim extension for testing-language-server",
   "author": "kbwo <kbwo.owbk@gmail.com>",
   "license": "MIT",

@@ -3,7 +3,7 @@ name: Publish npm package
 on:
   push:
     paths:
-      - 'package.json'
+      - package.json
     branches:
       - main
 
