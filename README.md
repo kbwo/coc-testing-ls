@@ -7,11 +7,23 @@ coc.nvim extension for testing-language-server
 
 ## Install
 
-`:CocInstall coc-testing`
+`:CocInstall coc-testing-ls`
 
 ## Lists
 
 `:CocList tests`
+
+## Commands
+You can check the available commands with `:CocList commands`.
+
+These commands are available.
+
+- `testing-ls.clearDiagnostics`
+    - clear all diagnostics
+- `testing-ls.restart`
+    - Restart testing-language-server
+- `testing-ls.runFileTest`
+    - Run file test with testing-language-server
 
 ## License
 
