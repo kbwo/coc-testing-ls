@@ -24,6 +24,7 @@ export class Ctx {
     try {
       const client = createClient(this.config);
       this.client = client;
+      await client.start();
       this.extCtx.subscriptions.push(
         commands.registerCommand("testing-ls.runFileTest", async () => {
           Command.runFileTests(client);
